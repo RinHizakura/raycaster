@@ -1,8 +1,10 @@
 // fixed-point implementation
 
 #include "raycaster_fixed.h"
+#include "precalculator.h"
 #include "raycaster_data.h"
-#include "raycaster_tables.h"
+
+#include <cstdio>
 
 // (v * f) >> 8
 uint16_t RayCasterFixed::MulU(uint8_t v, uint16_t f)
