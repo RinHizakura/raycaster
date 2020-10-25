@@ -7,8 +7,8 @@ bool RayCasterFloat::IsWall(float rayX, float rayY)
 {
     float mapX = 0;
     float mapY = 0;
-    float offsetX = modff(rayX, &mapX);
-    float offsetY = modff(rayY, &mapY);
+    __attribute__((unused)) float offsetX = modff(rayX, &mapX);
+    __attribute__((unused)) float offsetY = modff(rayY, &mapY);
     int tileX = static_cast<int>(mapX);
     int tileY = static_cast<int>(mapY);
 
