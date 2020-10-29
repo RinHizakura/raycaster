@@ -28,13 +28,14 @@ void Game::Move(int m, int r, float seconds)
     } else if (playerY > MAP_Y - 2) {
         playerY = MAP_Y - 2 - 0.01f;
     }
-    // printf("playerX: %f, playerY: %f\n", playerX, playerY);
+    // printf("playerX: %f, playerY: %f playerA: %f\n", playerX, playerY,
+    // playerA);
 }
 
 Game::Game()
 {
-    playerX = 23.03f;
-    playerY = 6.8f;
+    playerX = 29.99f;  // 23.03f;
+    playerY = 15.38f;  // 6.8f;
     playerA = 5.25f;
 }
 

@@ -30,11 +30,18 @@ static const uint8_t g_cos[256] = {
 #undef S1
 };
 
+static const uint8_t g_closeHeight[256] = {
+#define S1(i) (uint8_t)((INV_FACTOR_INT / ((((i) << 0) + MIN_DIST) >> 0)) >> 0)
+    S256(0)
+#undef S1
+};
+
 static const uint8_t g_nearHeight[256] = {
 #define S1(i) (uint8_t)((INV_FACTOR_INT / ((((i) << 2) + MIN_DIST) >> 2)) >> 2)
     S256(0)
 #undef S1
 };
+
 
 static const uint8_t g_farHeight[256] = {
 #define S1(i) (uint8_t)((INV_FACTOR_INT / ((((i) << 5) + MIN_DIST) >> 5)) >> 5)
@@ -44,6 +51,18 @@ static const uint8_t g_farHeight[256] = {
 
 
 #define DELTA 1e-300
+static const uint16_t g_closeStep[256] = {
+#define S1(i)                                                              \
+    (uint16_t)(                                                            \
+        (256 /                                                             \
+         ((((INV_FACTOR_INT / ((((i) *1.0f) + MIN_DIST) / 1.0f)) / 1.0f) * \
+           2.0f) +                                                         \
+          DELTA)) *                                                        \
+        256)
+    S256(0)
+#undef S1
+};
+
 static const uint16_t g_nearStep[256] = {
 #define S1(i)                                                              \
     (uint16_t)(                                                            \

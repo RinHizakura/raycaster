@@ -1,5 +1,6 @@
 #include "renderer.h"
 #include <math.h>
+#include <cstdio>
 #include "raycaster_data.h"
 
 void Renderer::TraceFrame(Game *g, uint32_t *fb)
