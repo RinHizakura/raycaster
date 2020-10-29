@@ -1,6 +1,6 @@
 BIN = main
 
-CXXFLAGS = -std=c++14 -O2 -Wall -g
+CXXFLAGS = -std=c++14 -O2 -Wall -g 
 
 # SDL
 CXXFLAGS += -I /usr/local/include/SDL2 # macOS

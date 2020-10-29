@@ -1,4 +1,5 @@
 #include <cmath>
+#include <cstdio>
 #include <cstdlib>
 
 #include "game.h"
@@ -27,6 +28,7 @@ void Game::Move(int m, int r, float seconds)
     } else if (playerY > MAP_Y - 2) {
         playerY = MAP_Y - 2 - 0.01f;
     }
+    // printf("playerX: %f, playerY: %f\n", playerX, playerY);
 }
 
 Game::Game()

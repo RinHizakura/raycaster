@@ -84,7 +84,6 @@ static const uint16_t g_overflowOffset[256] = {
 #undef S1
 };
 
-
 template <class T, int N>
 struct array {
     T elems[N];
