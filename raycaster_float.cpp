@@ -2,6 +2,7 @@
 
 #include "raycaster_float.h"
 #include <math.h>
+#include <cstdio>
 
 bool RayCasterFloat::IsWall(float rayX, float rayY)
 {
@@ -53,30 +54,14 @@ float RayCasterFloat::Distance(float playerX,
         startDeltaX = (1 - offsetY) * tan(rayA);
         startDeltaY = (1 - offsetX) / tan(rayA);
     } else if (rayA <= M_PI) {
-        if (offsetY == 0) {
-            startDeltaX = (1) * fabs(tan(rayA));
-        } else {
-            startDeltaX = (offsetY) *fabs(tan(rayA));
-        }
+        startDeltaX = (offsetY) *fabs(tan(rayA));
         startDeltaY = -(1 - offsetX) / fabs(tan(rayA));
     } else if (rayA < 3 * M_PI_2) {
-        if (offsetY == 0) {
-            startDeltaX = -(1) * fabs(tan(rayA));
-        } else {
-            startDeltaX = -(offsetY) *fabs(tan(rayA));
-        }
-        if (offsetX == 0) {
-            startDeltaY = -(1) / fabs(tan(rayA));
-        } else {
-            startDeltaY = -(offsetX) / fabs(tan(rayA));
-        }
+        startDeltaX = -(offsetY) *fabs(tan(rayA));
+        startDeltaY = -(offsetX) / fabs(tan(rayA));
     } else {
         startDeltaX = -(1 - offsetY) * fabs(tan(rayA));
-        if (offsetX == 0) {
-            startDeltaY = (1) / fabs(tan(rayA));
-        } else {
-            startDeltaY = (offsetX) / fabs(tan(rayA));
-        }
+        startDeltaY = (offsetX) / fabs(tan(rayA));
     }
 
     float interceptX = rayX + startDeltaX;
@@ -142,6 +127,8 @@ void RayCasterFloat::Trace(uint16_t screenX,
     float lineDistance = Distance(_playerX, _playerY, _playerA + deltaAngle,
                                   &hitOffset, &hitDirection);
     float distance = lineDistance * cos(deltaAngle);
+
+
     float dum;
     *textureX = (uint8_t)(256.0f * modff(hitOffset, &dum));
     *textureNo = hitDirection;
@@ -160,7 +147,7 @@ void RayCasterFloat::Trace(uint16_t screenX,
             }
         }
     } else {
-        *screenY = 0;
+        *screenY = 10;
     }
 }
 

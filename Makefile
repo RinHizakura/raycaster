@@ -1,6 +1,6 @@
 BIN = main
 
-CXXFLAGS = -std=c++14 -O2 -Wall -g 
+CXXFLAGS = -std=c++14 -O2 -Wall -g
 
 # SDL
 CXXFLAGS += -I /usr/local/include/SDL2 # macOS
@@ -35,7 +35,7 @@ deps := $(OBJS:%.o=.%.o.d)
 
 %.o: %.cpp
 	$(VECHO) "  CXX\t$@\n"
-	$(Q)$(CXX) -o $@ $(CXXFLAGS) -c -MMD -MF .$@.d $<
+	$(Q)$(CXX) -o $@ $(CXXFLAGS)  -c -MMD -MF .$@.d $<
 
 $(BIN): $(OBJS)
 	$(Q)$(CXX)  -o $@ $^ $(LDFLAGS)
