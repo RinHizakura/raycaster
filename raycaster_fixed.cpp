@@ -74,25 +74,17 @@ void RayCasterFixed::LookupHeight(uint16_t distance,
                                   uint16_t *step)
 {
     if (distance >= 256) {
-        uint16_t ds = distance >> 2;
+        const uint16_t ds = distance >> 3;
         if (ds >= 256) {
-            ds >>= 3;
-            if (ds >= 256) {
-                *height = LOOKUP8(g_farHeight, 255) - 1;
-                *step = LOOKUP16(g_farStep, 255);
-            } else {
-                *height = LOOKUP8(g_farHeight, ds);
-                *step = LOOKUP16(g_farStep, ds);
-            }
+            *height = LOOKUP8(g_farHeight, 255) - 1;
+            *step = LOOKUP16(g_farStep, 255);
         } else {
-            *height = LOOKUP8(g_nearHeight, ds);
-            *step = LOOKUP16(g_nearStep, ds);
+            *height = LOOKUP8(g_farHeight, ds);
+            *step = LOOKUP16(g_farStep, ds);
         }
-    }
-
-    else {
-        *height = LOOKUP8(g_closeHeight, distance);
-        *step = LOOKUP16(g_closeStep, distance);
+    } else {
+        *height = LOOKUP8(g_nearHeight, distance);
+        *step = LOOKUP16(g_nearStep, distance);
     }
 }
 
@@ -295,11 +287,9 @@ void RayCasterFixed::Trace(uint16_t screenX,
             break;
         }
 
-    if (screenX == 10)
-        printf("d %d %d\n", distance, (distance - MIN_DIST));
     if (distance >= MIN_DIST) {
         *textureY = 0;
-        LookupHeight((distance - MIN_DIST), screenY, textureStep);
+        LookupHeight((distance - MIN_DIST) >> 2, screenY, textureStep);
     } else {
         *screenY = SCREEN_HEIGHT >> 1;
         *textureY = LOOKUP16(g_overflowOffset, distance);
