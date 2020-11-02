@@ -53,4 +53,35 @@ void Renderer::TraceFrame(Game *g, uint32_t *fb)
             lb += SCREEN_WIDTH;
         }
     }
+
+    /* plot FPS */
+    for (int i = 0; i < 5; i++) {
+        uint32_t *lb = fb + (200 + 2 * i);
+        for (int j = 0; j < 16; j++) {
+            int jj = j / 2;
+            if (num_zero[jj * 5 + i] == 1) {
+                uint32_t *tb = lb;
+                for (int x = 0; x < 2; x++) {
+                    *tb = 0x00FF0000;
+                    tb++;
+                }
+            }
+            lb += SCREEN_WIDTH;
+        }
+    }
+
+    for (int i = 0; i < 5; i++) {
+        uint32_t *lb = fb + (215 + 2 * i);
+        for (int j = 0; j < 16; j++) {
+            int jj = j / 2;
+            if (num_one[jj * 5 + i] == 1) {
+                uint32_t *tb = lb;
+                for (int x = 0; x < 2; x++) {
+                    *tb = 0x00FF0000;
+                    tb++;
+                }
+            }
+            lb += SCREEN_WIDTH;
+        }
+    }
 }

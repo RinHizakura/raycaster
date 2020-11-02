@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 
+#include <time.h>
 #include "game.h"
 #include "raycaster.h"
 #include "raycaster_fixed.h"
@@ -63,6 +64,14 @@ static bool ProcessEvent(const SDL_Event &event,
     }
     return false;
 }
+
+double gettime()
+{
+    struct timespec tt;
+    clock_gettime(CLOCK_MONOTONIC, &tt);
+    return tt.tv_sec + tt.tv_nsec / 1e9;
+}
+
 int main(int argc, char *args[])
 {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -81,6 +90,7 @@ int main(int argc, char *args[])
             Game game;
             RayCasterFloat floatCaster;
             Renderer floatRenderer(&floatCaster);
+
             uint32_t floatBuffer[SCREEN_WIDTH * SCREEN_HEIGHT];
             RayCasterFixed fixedCaster;
             Renderer fixedRenderer(&fixedCaster);
@@ -118,6 +128,7 @@ int main(int argc, char *args[])
                 const auto nextCounter = SDL_GetPerformanceCounter();
                 const auto seconds = (nextCounter - tickCounter) /
                                      static_cast<float>(tickFrequency);
+
                 tickCounter = nextCounter;
                 game.Move(moveDirection, rotateDirection, seconds);
             }
