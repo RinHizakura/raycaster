@@ -3,6 +3,39 @@
 #include <cstdio>
 #include "raycaster_data.h"
 
+#define draw(data, pos, i)                                  \
+    for (i = 0; i < 4; i++) {                               \
+        uint32_t *lb = fb + ((pos) + 2 * i) + SCREEN_WIDTH; \
+        for (int j = 0; j < 16; j++) {                      \
+            int jj = j / 2;                                 \
+            if (data[jj * 4 + i] == 1) {                    \
+                uint32_t *tb = lb;                          \
+                for (int x = 0; x < 2; x++) {               \
+                    *tb = 0x88444444;                       \
+                    tb++;                                   \
+                }                                           \
+            }                                               \
+            lb += SCREEN_WIDTH;                             \
+        }                                                   \
+    }
+
+void Renderer::ShowFPS(uint32_t fps, uint32_t *fb)
+{
+    int iter;
+    int i;
+    for (i = 0; fps > 0; i++) {
+        draw(number_data[fps % 10], SCREEN_WIDTH - 10 - 15 * i, iter);
+        fps /= 10;
+    }
+    draw(colon_data, SCREEN_WIDTH - 10 - 15 * i, iter);
+    i++;
+    draw(s_data, SCREEN_WIDTH - 10 - 15 * i, iter);
+    i++;
+    draw(p_data, SCREEN_WIDTH - 10 - 15 * i, iter);
+    i++;
+    draw(f_data, SCREEN_WIDTH - 10 - 15 * i, iter);
+}
+
 void Renderer::TraceFrame(Game *g, uint32_t *fb)
 {
     _rc->Start(static_cast<uint16_t>(g->playerX * 256.0f),
@@ -50,37 +83,6 @@ void Renderer::TraceFrame(Game *g, uint32_t *fb)
 
         for (int y = 0; y < ws; y++) {
             *lb = GetARGB(96 + (HORIZON_HEIGHT - (ws - y)));
-            lb += SCREEN_WIDTH;
-        }
-    }
-
-    /* plot FPS */
-    for (int i = 0; i < 5; i++) {
-        uint32_t *lb = fb + (200 + 2 * i);
-        for (int j = 0; j < 16; j++) {
-            int jj = j / 2;
-            if (num_zero[jj * 5 + i] == 1) {
-                uint32_t *tb = lb;
-                for (int x = 0; x < 2; x++) {
-                    *tb = 0x00FF0000;
-                    tb++;
-                }
-            }
-            lb += SCREEN_WIDTH;
-        }
-    }
-
-    for (int i = 0; i < 5; i++) {
-        uint32_t *lb = fb + (215 + 2 * i);
-        for (int j = 0; j < 16; j++) {
-            int jj = j / 2;
-            if (num_one[jj * 5 + i] == 1) {
-                uint32_t *tb = lb;
-                for (int x = 0; x < 2; x++) {
-                    *tb = 0x00FF0000;
-                    tb++;
-                }
-            }
             lb += SCREEN_WIDTH;
         }
     }

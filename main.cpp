@@ -1,9 +1,8 @@
 #include <SDL.h>
-#include <stdio.h>
+#include <cstdio>
 #include <fstream>
 #include <iostream>
 
-#include <time.h>
 #include "game.h"
 #include "raycaster.h"
 #include "raycaster_fixed.h"
@@ -65,12 +64,6 @@ static bool ProcessEvent(const SDL_Event &event,
     return false;
 }
 
-double gettime()
-{
-    struct timespec tt;
-    clock_gettime(CLOCK_MONOTONIC, &tt);
-    return tt.tv_sec + tt.tv_nsec / 1e9;
-}
 
 int main(int argc, char *args[])
 {
@@ -111,15 +104,22 @@ int main(int argc, char *args[])
                 sdlRenderer, SDL_PIXELFORMAT_ARGB8888,
                 SDL_TEXTUREACCESS_STREAMING, SCREEN_WIDTH, SCREEN_HEIGHT);
 
+            uint32_t fps = 0;
+            uint32_t prev_fps = 0;
+            double cum_time = 0;
             while (!isExiting) {
                 floatRenderer.TraceFrame(&game, floatBuffer);
                 fixedRenderer.TraceFrame(&game, fixedBuffer);
+
+                // tricky show FPS on screen
+                floatRenderer.ShowFPS(prev_fps, floatBuffer);
 
                 DrawBuffer(sdlRenderer, fixedTexture, fixedBuffer, 0);
                 DrawBuffer(sdlRenderer, floatTexture, floatBuffer,
                            SCREEN_WIDTH + 1);
 
                 SDL_RenderPresent(sdlRenderer);
+
 
                 if (SDL_PollEvent(&event)) {
                     isExiting =
@@ -128,7 +128,13 @@ int main(int argc, char *args[])
                 const auto nextCounter = SDL_GetPerformanceCounter();
                 const auto seconds = (nextCounter - tickCounter) /
                                      static_cast<float>(tickFrequency);
-
+                cum_time += seconds;
+                fps++;
+                if (cum_time >= 1.0f) {
+                    prev_fps = fps;
+                    cum_time = 0;
+                    fps = 0;
+                }
                 tickCounter = nextCounter;
                 game.Move(moveDirection, rotateDirection, seconds);
             }

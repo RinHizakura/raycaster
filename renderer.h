@@ -13,6 +13,7 @@ class Renderer
     }
 
 public:
+    void ShowFPS(uint32_t fps, uint32_t *frameBuffer);
     void TraceFrame(Game *g, uint32_t *frameBuffer);
     Renderer(RayCaster *rc) { _rc = rc; };
     ~Renderer(){};
